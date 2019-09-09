@@ -1,7 +1,15 @@
 // the schema will describe how the data on our graph will look
 const graphql = require('graphql');
+const _ = require('lodash');
 
 const {GraphQLObjectType, GraphQLString, GraphQLSchema} = graphql;
+
+//dummy data 
+var books = [
+  {name: 'Name of the Wind', genre: 'Fantasy', id: '1'},
+  {name: 'The Final Empire', genre: 'Fantasy', id: '2'},
+  {name: 'The Long Earth', genre: 'Sci-Fi', id: '3'}
+];
 
 // GraphQLObjectType is a function that takes in an object
 // the object defines what the BookType is about
@@ -27,6 +35,8 @@ const RootQuery = new GraphQLObjectType({
       args: { id: {type: GraphQLString} },
       resolve(parents, args){
         // code to get data from database or other souce 
+        // we use lodash to look through the books array and find any book that has an id equal to args.id
+        return _.find(books, {id: args.id});
       }
     }
   }
