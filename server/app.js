@@ -5,11 +5,13 @@ const graphqlHTTP = require('express-graphql');
 // invokes express to create our app
 const app = express();
 
+const schema = require('./schema/schema');
+
 // pass graphqlHTTP as middleware to a single endpoint
 // graphqlHTTP allows our express server to run the graphQL api
 // when a user accesses this endpoint, express will hand the request to graphqlHTTP
 app.use('/graphql', graphqlHTTP({
-
+  schema: schema
 }));
 
 // tells app to listen to requests on port 3000
