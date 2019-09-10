@@ -2,7 +2,7 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 
-const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID} = graphql;
+const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt} = graphql;
 
 //dummy data 
 var books = [
@@ -10,6 +10,12 @@ var books = [
   {name: 'The Final Empire', genre: 'Fantasy', id: '2'},
   {name: 'The Long Earth', genre: 'Sci-Fi', id: '3'}
 ];
+
+var authors = [
+  {name: 'Patrick Rothfuss', age: 44, id: '1'},
+  {name: 'Brandon Sanderson', age: 42, id: '2'},
+  {name: 'Terry Pratchett', age: 66, id: '3'}
+]
 
 // GraphQLObjectType is a function that takes in an object
 // the object defines what the BookType is about
@@ -25,6 +31,16 @@ const BookType = new GraphQLObjectType({
   })
 })
 
+
+const AuthorType = new GraphQLObjectType({
+  name: 'Author',
+  fields: () => ({
+    id: {type: GraphQLID},
+    name: {type: GraphQLString},
+    age: {type: GraphQLInt} 
+  })
+})
+
 // a root query describes how user can jump into the graph and grab data
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
@@ -37,6 +53,13 @@ const RootQuery = new GraphQLObjectType({
         // code to get data from database or other souce 
         // we use lodash to look through the books array and find any book that has an id equal to args.id
         return _.find(books, {id: args.id});
+      }
+    },
+    author: {
+      type: AuthorType,
+      args: { id: {type: GraphQLID} }, 
+      resolve(parent, args){
+        return _.find(authors, {id: args.id})
       }
     }
   }
