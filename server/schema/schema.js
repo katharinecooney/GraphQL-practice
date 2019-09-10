@@ -2,7 +2,7 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 
-const {GraphQLObjectType, GraphQLString, GraphQLSchema} = graphql;
+const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID} = graphql;
 
 //dummy data 
 var books = [
@@ -19,7 +19,7 @@ const BookType = new GraphQLObjectType({
   // the fields will contain data about each individual book
   fields: () => ({
     // we cannot use String; we need to use a special GraphQLString in order for GraphQL to understand the type
-    id: {type: GraphQLString},
+    id: {type: GraphQLID},
     name: {type: GraphQLString},
     genre: {type: GraphQLString} 
   })
@@ -32,7 +32,7 @@ const RootQuery = new GraphQLObjectType({
     book: {
       type: BookType,
       // the user should pass one of these arguments when they are querying for a particular book 
-      args: { id: {type: GraphQLString} },
+      args: { id: {type: GraphQLID} },
       resolve(parents, args){
         // code to get data from database or other souce 
         // we use lodash to look through the books array and find any book that has an id equal to args.id
