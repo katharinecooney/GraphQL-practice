@@ -2,7 +2,7 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 const Book = require('../models/book');
-const Author = require('../models/author');
+const Author = require('../models/author'); 
 
 const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLList} = graphql;
 
@@ -84,6 +84,37 @@ const RootQuery = new GraphQLObjectType({
   }
 })
 
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    // when a user uses the addAuthor mutation, 
+    // they can add a new author to the database
+    addAuthor: {
+      type: AuthorType,
+      // the user needs to provide 2 arguments - 
+      // the author's name and age
+      args: {
+        name: {type: GraphQLString},
+        age: {type: GraphQLInt }
+      },
+      resolve(parent, args){
+        // we will create a local variable 
+        // using our imported Author Schema for Mongo
+        let author = new Author({
+          // the provided arguments are stored in the args object
+          name: args.name,
+          age: args.age
+        });
+        // save this new author object to the database
+        // we return the author so user has
+        // immediate access and can retrieve data
+        return author.save()
+      }
+    }
+  }
+})
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
