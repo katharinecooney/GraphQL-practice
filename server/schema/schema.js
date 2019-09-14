@@ -1,24 +1,10 @@
 // the schema will describe how the data on our graph will look
 const graphql = require('graphql');
 const _ = require('lodash');
+const Book = require('../models/book');
+const Author = require('../models/author');
 
 const {GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID, GraphQLInt, GraphQLList} = graphql;
-
-//dummy data 
-var books = [
-  {name: 'Name of the Wind', genre: 'Fantasy', id: '1', authorId: '1'},
-  {name: 'The Final Empire', genre: 'Fantasy', id: '2', authorId: '2'},
-  {name: 'The Long Earth', genre: 'Sci-Fi', id: '3', authorId: '3'},
-  {name: 'The Hero of Ages', genre: 'Fantasy', id: '4', authorId: '3'},
-  {name: 'The Colour of Magic', genre: 'Fantasy', id: '5', authorId: '3'},
-  {name: 'The Light Fantastic', genre: 'Fantasy', id: '6', authorId: '3'}
-];
-
-var authors = [
-  {name: 'Patrick Rothfuss', age: 44, id: '1'},
-  {name: 'Brandon Sanderson', age: 42, id: '2'},
-  {name: 'Terry Pratchett', age: 66, id: '3'}
-]
 
 // GraphQLObjectType is a function that takes in an object
 // the object defines what the BookType is about
@@ -36,7 +22,7 @@ const BookType = new GraphQLObjectType({
       resolve(parent, args){
         // when a user nests an author request inside  the book request, the book is the parent
         console.log(parent);
-        return _.find(authors, {id: parent.authorId})
+        // return _.find(authors, {id: parent.authorId})
       }
     } 
   })
@@ -56,7 +42,7 @@ const AuthorType = new GraphQLObjectType({
       resolve(parent, args) {
         // _.find only returns the first value that matches the criteria
         // _.filter returns all values that match the criteria
-        return _.filter(books, {authorId: parent.id})
+        // return _.filter(books, {authorId: parent.id})
       }
     } 
   })
@@ -73,26 +59,26 @@ const RootQuery = new GraphQLObjectType({
       resolve(parents, args){
         // code to get data from database or other souce 
         // we use lodash to look through the books array and find any book that has an id equal to args.id
-        return _.find(books, {id: args.id});
+        // return _.find(books, {id: args.id});
       }
     },
     author: {
       type: AuthorType,
       args: { id: {type: GraphQLID} }, 
       resolve(parent, args){
-        return _.find(authors, {id: args.id})
+        // return _.find(authors, {id: args.id})
       }
     },
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args){
-        return books;
+        // return books;
       }
     },
     authors: {
       type: new GraphQLList(AuthorType),
       resolve(parent, args){
-        return authors;
+        // return authors;
       }
     }
   }
