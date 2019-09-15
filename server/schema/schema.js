@@ -21,8 +21,8 @@ const BookType = new GraphQLObjectType({
       type: AuthorType,
       resolve(parent, args){
         // when a user nests an author request inside  the book request, the book is the parent
-        console.log(parent);
         // return _.find(authors, {id: parent.authorId})
+        return Author.findById(parent.authorId);
       }
     } 
   })
@@ -109,6 +109,30 @@ const Mutation = new GraphQLObjectType({
         // we return the author so user has
         // immediate access and can retrieve data
         return author.save()
+      }
+    },
+    addBook: {
+      type: BookType,
+      // the user needs to provide 3 arguments - 
+      // the books's name, genre, and authorId
+      args: {
+        name: {type: GraphQLString},
+        genre: {type: GraphQLString },
+        authorId: {type: GraphQLID}
+      },
+      resolve(parent, args){
+        // we will create a local variable 
+        // using our imported Book Schema for Mongo
+        let book = new Book({
+          // the provided arguments are stored in the args object
+          name: args.name,
+          genre: args.genre,
+          authorId: args.authorId
+        });
+        // save this new author object to the database
+        // we return the author so user has
+        // immediate access and can retrieve data
+        return book.save()
       }
     }
   }
