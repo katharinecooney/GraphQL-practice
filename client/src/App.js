@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider } from 'react-apollo';
 import BookList from './components/BookList';
 
 // apollo client setup
