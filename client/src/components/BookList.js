@@ -4,6 +4,15 @@ import {graphql} from 'react-apollo';
 import {getBooksQuery} from '../queries/queries';
 
 class BookList extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      // this will keep track of the 
+      // book that is selected
+      selected: null
+    }
+  }
+
   
   displayBooks = () => {
     let data = this.props.data;
@@ -11,7 +20,9 @@ class BookList extends Component {
       return (<div>loading books...</div>)
     } else {
       return (data.books.map(book => {
-        return (<li key={book.id}>{book.name}</li>)
+        // we need to attach an event listener to each book
+        // this will update the state with the ID of the selected book
+        return (<li onClick={() => this.setState({selected: book.id})} key={book.id}>{book.name}</li>)
         
       }))
     }
@@ -23,7 +34,7 @@ class BookList extends Component {
         <ul id="book-list">
           {this.displayBooks()}
         </ul>
-        <BookDetails />
+        <BookDetails bookId={this.state.selected}/>
       </div>
     )
   }
