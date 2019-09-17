@@ -4,7 +4,27 @@ import {getAuthorsQuery} from '../queries/queries';
 
 class AddBook extends Component {
 
-  displayAuthors(){
+  constructor(props){
+    super(props);
+    this.state = {
+      name: '',
+      genre: '',
+      authorId: ''
+    }
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value 
+    });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.state);
+  }
+
+  displayAuthors = () => {
     let {data} = this.props;
     // check if data has been loaded 
     // (data.loading === false)
@@ -23,22 +43,22 @@ class AddBook extends Component {
   }
   
   render(){
-    return(
+    return (
       // simple form to add a new book
       // must type out book name and genre
       // authors will appear in a dropdown list
-      <form id="add-book">
+      <form id="add-book" onSubmit={this.handleSubmit}>
         <div className="field">
           <label>Book name:</label>
-          <input type="text" />
+          <input type="text" onChange={this.handleChange} value={this.state.name} name="name" />
         </div>
         <div className="field">
           <label>Genre:</label>
-          <input type="text" />
+          <input type="text" onChange={this.handleChange} value={this.state.genre} name="genre"/>
         </div>
         <div className="field">
           <label>Author:</label>
-          <select>
+          <select onChange={this.handleChange} value={this.state.authorID} name="authorId">
             <option>Select author</option>
             {this.displayAuthors()}
           </select>
