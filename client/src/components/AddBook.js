@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
-import {getAuthorsQuery} from '../queries/queries';
+import { compose } from 'recompose';
+import {getAuthorsQuery, addBookMutation} from '../queries/queries';
 
 class AddBook extends Component {
 
@@ -21,11 +22,11 @@ class AddBook extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.addBookMutation();
   }
 
   displayAuthors = () => {
-    let {data} = this.props;
+    let data = this.props.getAuthorsQuery;
     // check if data has been loaded 
     // (data.loading === false)
     if(data.loading === true){
@@ -69,4 +70,9 @@ class AddBook extends Component {
   }
 }
 
-export default graphql(getAuthorsQuery)(AddBook);
+// we need to bind two queries to our AddBook component
+// we can compose our two queries together
+export default compose(
+  graphql(addBookMutation, {name: "addBookMutation"}),
+  graphql(getAuthorsQuery, {name: "getAuthorsQuery"})
+)(AddBook);
