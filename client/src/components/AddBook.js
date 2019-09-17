@@ -1,34 +1,23 @@
 import React, { Component } from 'react';
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
-
-// query to get all authors
-const getAuthorsQuery = gql`
-  {
-    authors {
-      name
-      id
-    }
-  }
-`;
+import {getAuthorsQuery} from '../queries/queries';
 
 class AddBook extends Component {
 
   displayAuthors(){
-    let data = this.props.data;
+    let {data} = this.props;
     // check if data has been loaded 
     // (data.loading === false)
     if(data.loading === true){
       return (<option disabled>loading authors...</option>)
     } else {
       // when data loads, map through each author 
-      // and embed it in a <select> tag for the dropdown
+      // and embed it in a <option> tag for the dropdown
       return (data.authors.map(author => {
         // we need a value so we can know 
         // the value of the selected option
         // we will use the author id to add the book to the backend
         return (<option key={author.id} value={author.id}>{author.name}</option>)
-        
       }))
     }
   }
