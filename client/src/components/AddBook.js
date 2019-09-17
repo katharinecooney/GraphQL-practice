@@ -21,8 +21,19 @@ class AddBook extends Component {
   }
 
   handleSubmit = (e) => {
+    let {name, genre, authorId} = this.state;
     e.preventDefault();
-    this.props.addBookMutation();
+    // we will use query variables to inject the info stored in our state into this mutation
+    // the names of the variables are specified in queries.js
+    // we pass a variables object to our mutation
+    // the object contains each variable specified in queries.js, as well as its value
+    this.props.addBookMutation({
+      variables: {
+        name: this.state.name,
+        genre: this.state.genre,
+        authorId: this.state.authorId
+      }
+    });
   }
 
   displayAuthors = () => {
